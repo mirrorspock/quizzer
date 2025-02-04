@@ -103,3 +103,19 @@ header h1 {
 .incorrect .wrong-answer {
     text-decoration: line-through;
 }
+
+#scoreBoard {
+    margin-top: 20px;
+    font-size: 1.5em;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.score {
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
