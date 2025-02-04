@@ -1,0 +1,86 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f8ff;
+    text-align: center;
+    padding: 20px;
+}
+
+header h1 {
+    font-size: 3em;
+    color: #ff4500;
+}
+
+#settings {
+    margin-bottom: 20px;
+}
+
+#settings h2 {
+    font-size: 2em;
+    color: #32cd32;
+}
+
+#checkboxes {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+#checkboxes label {
+    font-size: 1.5em;
+    margin: 5px;
+}
+
+#startButton {
+    font-size: 1.5em;
+    padding: 10px 20px;
+    background-color: #32cd32;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#startButton:hover {
+    background-color: #228b22;
+}
+
+#game {
+    display: none;
+}
+
+#question {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+}
+
+#answers button {
+    font-size: 2em;
+    padding: 10px 20px;
+    margin: 10px;
+    background-color: #ff4500;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#answers button:hover {
+    background-color: #ff6347;
+}
+
+#timebar {
+    width: 100%;
+    background-color: #ddd;
+    margin-top: 20px;
+    height: 30px;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+#progress {
+    height: 100%;
+    background-color: #32cd32;
+    width: 100%;
+    transition: width 0.1s linear;
+}

@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const questionDiv = document.getElementById('question');
     const answersDiv = document.getElementById('answers');
     const progressDiv = document.getElementById('progress');
+    const gameSection = document.getElementById('game');
     let timer;
 
     function getRandomInt(min, max) {
@@ -21,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const table = selectedTables[getRandomInt(0, selectedTables.length - 1)];
-        const multiplier = getRandomInt(1, 15);
+        const multiplier = getRandomInt(1, 10);
         const correctAnswer = table * multiplier;
 
         questionDiv.textContent = `What is ${table} x ${multiplier}?`;
@@ -70,5 +71,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 100);
     }
 
-    startButton.addEventListener('click', generateQuestion);
+    startButton.addEventListener('click', () => {
+        gameSection.style.display = 'block';
+        generateQuestion();
+    });
 });
