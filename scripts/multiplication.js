@@ -1,16 +1,18 @@
 document.addEventListener('DOMContentLoaded', () => {
     const checkboxes = document.querySelectorAll('#checkboxes input[type="checkbox"]');
     const startButton = document.getElementById('startButton');
+    const stopButton = document.getElementById('stopButton');
     const questionDiv = document.getElementById('question');
     const answersDiv = document.getElementById('answers');
     const progressDiv = document.getElementById('progress');
     const gameSection = document.getElementById('game');
-    const answerHistoryDiv = document.createElement('div');
-    answerHistoryDiv.id = 'answerHistory';
-    document.body.appendChild(answerHistoryDiv);
     const scoreBoardDiv = document.createElement('div');
     scoreBoardDiv.id = 'scoreBoard';
     document.body.appendChild(scoreBoardDiv);
+    const answerHistoryDiv = document.createElement('div');
+    answerHistoryDiv.id = 'answerHistory';
+    document.body.appendChild(answerHistoryDiv);
+    const settingsSection = document.getElementById('settings');
     let timer;
     const scores = {};
 
@@ -57,6 +59,14 @@ document.addEventListener('DOMContentLoaded', () => {
     function checkAnswer(selected, correct, table, multiplier) {
         clearInterval(timer);
         const result = document.createElement('div');
+        const buttons = answersDiv.querySelectorAll('button');
+        buttons.forEach(button => {
+            if (parseInt(button.textContent) === correct) {
+                button.classList.add('correct');
+            } else if (parseInt(button.textContent) === selected) {
+                button.classList.add('incorrect');
+            }
+        });
         if (selected === correct) {
             result.textContent = `${table} x ${multiplier} = ${selected}`;
             result.classList.add('correct');
@@ -67,7 +77,10 @@ document.addEventListener('DOMContentLoaded', () => {
             updateScore(table, false);
         }
         answerHistoryDiv.appendChild(result);
-        generateQuestion();
+        if (answerHistoryDiv.children.length > 4) {
+            answerHistoryDiv.removeChild(answerHistoryDiv.firstChild);
+        }
+        setTimeout(generateQuestion, 1000); // Delay before generating the next question
     }
 
     function startTimer() {
@@ -82,6 +95,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 result.textContent = 'Time is up!';
                 result.classList.add('incorrect');
                 answerHistoryDiv.appendChild(result);
+                if (answerHistoryDiv.children.length > 4) {
+                    answerHistoryDiv.removeChild(answerHistoryDiv.firstChild);
+                }
                 generateQuestion();
             }
         }, 100);
@@ -110,8 +126,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function showFinalScore() {
+        clearInterval(timer);
+        gameSection.style.display = 'none';
+        settingsSection.style.display = 'block';
+        stopButton.style.display = 'none';
+        startButton.style.display = 'block';
+        checkboxes.forEach(checkbox => checkbox.checked = false);
+        alert('Game Over! Check the score board for your final scores.');
+    }
+
     startButton.addEventListener('click', () => {
+        settingsSection.style.display = 'none';
         gameSection.style.display = 'block';
+        stopButton.style.display = 'block';
         generateQuestion();
     });
+
+    stopButton.addEventListener('click', showFinalScore);
 });

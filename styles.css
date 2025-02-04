@@ -47,6 +47,21 @@ header h1 {
     background-color: #228b22;
 }
 
+#stopButton {
+    font-size: 1.5em;
+    padding: 10px 20px;
+    background-color: #ff4500;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+#stopButton:hover {
+    background-color: #ff6347;
+}
+
 #game {
     display: none;
 }
@@ -71,6 +86,15 @@ header h1 {
     background-color: #ff6347;
 }
 
+#answers button.correct {
+    background-color: #32cd32;
+}
+
+#answers button.incorrect {
+    background-color: #ff4500;
+    text-decoration: line-through;
+}
+
 #timebar {
     width: 100%;
     background-color: #ddd;
@@ -87,23 +111,6 @@ header h1 {
     transition: width 0.1s linear;
 }
 
-#answerHistory {
-    margin-top: 20px;
-    font-size: 1.5em;
-}
-
-.correct {
-    color: green;
-}
-
-.incorrect {
-    color: red;
-}
-
-.incorrect .wrong-answer {
-    text-decoration: line-through;
-}
-
 #scoreBoard {
     margin-top: 20px;
     font-size: 1.5em;
@@ -118,4 +125,23 @@ header h1 {
     border: 1px solid #ddd;
     border-radius: 5px;
     background-color: #f9f9f9;
+}
+
+#answerHistory {
+    margin-top: 20px;
+    font-size: 1.5em;
+    max-height: 6em;
+    overflow-y: auto;
+}
+
+.correct {
+    color: green;
+}
+
+.incorrect {
+    color: red;
+}
+
+.incorrect .wrong-answer {
+    text-decoration: line-through;
 }
