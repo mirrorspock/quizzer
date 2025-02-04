@@ -5,6 +5,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const answersDiv = document.getElementById('answers');
     const progressDiv = document.getElementById('progress');
     const gameSection = document.getElementById('game');
+    const answerHistoryDiv = document.createElement('div');
+    answerHistoryDiv.id = 'answerHistory';
+    document.body.appendChild(answerHistoryDiv);
     let timer;
 
     function getRandomInt(min, max) {
@@ -40,20 +43,24 @@ document.addEventListener('DOMContentLoaded', () => {
         answers.forEach(answer => {
             const button = document.createElement('button');
             button.textContent = answer;
-            button.addEventListener('click', () => checkAnswer(answer, correctAnswer));
+            button.addEventListener('click', () => checkAnswer(answer, correctAnswer, table, multiplier));
             answersDiv.appendChild(button);
         });
 
         startTimer();
     }
 
-    function checkAnswer(selected, correct) {
+    function checkAnswer(selected, correct, table, multiplier) {
         clearInterval(timer);
+        const result = document.createElement('div');
         if (selected === correct) {
-            alert('Correct!');
+            result.textContent = `${table} x ${multiplier} = ${selected}`;
+            result.classList.add('correct');
         } else {
-            alert(`Wrong! The correct answer was ${correct}.`);
+            result.innerHTML = `${table} x ${multiplier} = <span class="wrong-answer">${selected}</span> (${correct})`;
+            result.classList.add('incorrect');
         }
+        answerHistoryDiv.appendChild(result);
         generateQuestion();
     }
 
@@ -65,7 +72,10 @@ document.addEventListener('DOMContentLoaded', () => {
             progressDiv.style.width = width + '%';
             if (width <= 0) {
                 clearInterval(timer);
-                alert('Time is up!');
+                const result = document.createElement('div');
+                result.textContent = 'Time is up!';
+                result.classList.add('incorrect');
+                answerHistoryDiv.appendChild(result);
                 generateQuestion();
             }
         }, 100);

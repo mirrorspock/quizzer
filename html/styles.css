@@ -3,6 +3,8 @@ body {
     background-color: #f0f8ff;
     text-align: center;
     padding: 20px;
+    position: relative;
+    overflow: hidden;
 }
 
 header h1 {
@@ -83,4 +85,21 @@ header h1 {
     background-color: #32cd32;
     width: 100%;
     transition: width 0.1s linear;
+}
+
+#answerHistory {
+    margin-top: 20px;
+    font-size: 1.5em;
+}
+
+.correct {
+    color: green;
+}
+
+.incorrect {
+    color: red;
+}
+
+.incorrect .wrong-answer {
+    text-decoration: line-through;
 }
