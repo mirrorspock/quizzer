@@ -8,7 +8,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const answerHistoryDiv = document.createElement('div');
     answerHistoryDiv.id = 'answerHistory';
     document.body.appendChild(answerHistoryDiv);
+    const scoreBoardDiv = document.createElement('div');
+    scoreBoardDiv.id = 'scoreBoard';
+    document.body.appendChild(scoreBoardDiv);
     let timer;
+    const scores = {};
 
     function getRandomInt(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -56,9 +60,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (selected === correct) {
             result.textContent = `${table} x ${multiplier} = ${selected}`;
             result.classList.add('correct');
+            updateScore(table, true);
         } else {
             result.innerHTML = `${table} x ${multiplier} = <span class="wrong-answer">${selected}</span> (${correct})`;
             result.classList.add('incorrect');
+            updateScore(table, false);
         }
         answerHistoryDiv.appendChild(result);
         generateQuestion();
@@ -79,6 +85,29 @@ document.addEventListener('DOMContentLoaded', () => {
                 generateQuestion();
             }
         }, 100);
+    }
+
+    function updateScore(table, isCorrect) {
+        if (!scores[table]) {
+            scores[table] = { correct: 0, incorrect: 0 };
+        }
+        if (isCorrect) {
+            scores[table].correct += 1;
+        } else {
+            scores[table].incorrect += 1;
+        }
+        renderScores();
+    }
+
+    function renderScores() {
+        scoreBoardDiv.innerHTML = '';
+        for (const table in scores) {
+            const score = scores[table];
+            const scoreDiv = document.createElement('div');
+            scoreDiv.classList.add('score');
+            scoreDiv.textContent = `Table ${table}: Correct: ${score.correct}, Incorrect: ${score.incorrect}`;
+            scoreBoardDiv.appendChild(scoreDiv);
+        }
     }
 
     startButton.addEventListener('click', () => {
