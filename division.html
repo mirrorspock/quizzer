@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Division</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Division</h1>
+    </header>
+    <section id="settings">
+        <h2>Select Difficulty Level</h2>
+        <div id="difficulty">
+            <label><input type="radio" name="difficulty" value="1"> Level 1 (No Remainder, Result ≤ 5)</label>
+            <label><input type="radio" name="difficulty" value="2"> Level 2 (No Remainder, Result ≤ 10)</label>
+            <label><input type="radio" name="difficulty" value="3"> Level 3 (No Remainder, Result ≤ 20)</label>
+            <label><input type="radio" name="difficulty" value="4"> Level 4 (With Remainder, Result ≤ 10)</label>
+            <label><input type="radio" name="difficulty" value="5"> Level 5 (With Remainder, Result ≤ 20)</label>
+        </div>
+        <button id="startButton">Start</button>
+    </section>
+    <section id="game">
+        <div id="question"></div>
+        <div id="answers">
+            <!-- Answer buttons will be generated here -->
+        </div>
+        <div id="timebar">
+            <div id="progress"></div>
+        </div>
+        <div id="scoreBoard">
+            <!-- Score board will be displayed here -->
+        </div>
+        <div id="answerHistory">
+            <!-- Answer history will be displayed here -->
+        </div>
+        <button id="stopButton" style="display: none;">Stop</button>
+    </section>
+    <script src="scripts/division.js"></script>
+</body>
+</html> 
