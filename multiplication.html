@@ -5,6 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Multiplication</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        #modeSelector {
+            margin-bottom: 10px;
+            font-family: Arial, sans-serif;
+        }
+
+        #modeSlider {
+            padding: 5px;
+            font-size: 16px;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -14,7 +25,6 @@
         <h2>Select Multiplication Tables</h2>
         <div id="checkboxes">
             <!-- Checkboxes for multiplication tables 1 to 15 -->
-            <!-- ...existing code... -->
             <label><input type="checkbox" value="1"> 1</label>
             <label><input type="checkbox" value="2"> 2</label>
             <label><input type="checkbox" value="3"> 3</label>
@@ -41,14 +51,21 @@
         <div id="timebar">
             <div id="progress"></div>
         </div>
-        <div id="scoreBoard">
-            <!-- Score board will be displayed here -->
-        </div>
         <div id="answerHistory">
             <!-- Answer history will be displayed here -->
         </div>
+        <div id="scoreBoard">
+            <!-- Score board will be displayed here -->
+        </div>
         <button id="stopButton" style="display: none;">Stop</button>
     </section>
+    <div id="modeSelector">
+        <label for="modeSlider">Mode:</label>
+        <select id="modeSlider">
+            <option value="Choose">Choose</option>
+            <option value="Open">Open</option>
+        </select>
+    </div>
     <script src="scripts/multiplication.js"></script>
 </body>
 </html>

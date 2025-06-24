@@ -19,6 +19,29 @@ document.addEventListener('DOMContentLoaded', () => {
     const unansweredQuestions = {}; // To track unanswered questions for each table
     const recentlyAsked = []; // To track recently asked questions
     const MAX_RECENTLY_ASKED = 5; // Limit for recently asked questions
+    let mode = 'Choose'; // Default mode
+
+    const modeSlider = document.getElementById('modeSlider');
+    modeSlider.addEventListener('change', (event) => {
+        mode = event.target.value;
+        answersDiv.innerHTML = ''; // Clear answers when mode changes
+        if (mode === 'Open') {
+            const inputBox = document.createElement('input');
+            inputBox.type = 'number';
+            inputBox.id = 'manualAnswer';
+            inputBox.placeholder = 'Enter your answer';
+            inputBox.autofocus = true;
+            inputBox.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    const userAnswer = parseInt(inputBox.value);
+                    clearInterval(timer);
+                    checkAnswer(userAnswer, correctAnswer, table, multiplier);
+                }
+            });
+            answersDiv.appendChild(inputBox);
+            inputBox.focus();
+        }
+    });
 
     function getRandomInt(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -86,34 +109,44 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const correctAnswer = table * multiplier;
 
-        // Track recently asked questions
-        const questionKey = `${table}x${multiplier}`;
-        recentlyAsked.push(questionKey);
-        if (recentlyAsked.length > MAX_RECENTLY_ASKED) {
-            recentlyAsked.shift();
-        }
-
         questionDiv.textContent = `What is ${table} x ${multiplier}?`;
 
-        const answers = [correctAnswer];
-        while (answers.length < 4) {
-            const wrongAnswer = correctAnswer + getRandomInt(-2, 2);
-            if (!answers.includes(wrongAnswer) && wrongAnswer > 0) {
-                answers.push(wrongAnswer);
-            }
-        }
-
-        answers.sort(() => Math.random() - 0.5);
         answersDiv.innerHTML = '';
-        answers.forEach(answer => {
-            const button = document.createElement('button');
-            button.textContent = answer;
-            button.addEventListener('click', () => {
-                clearInterval(timer);
-                checkAnswer(answer, correctAnswer, table, multiplier);
+        if (mode === 'Choose') {
+            const answers = [correctAnswer];
+            while (answers.length < 4) {
+                const wrongAnswer = correctAnswer + getRandomInt(-2, 2);
+                if (!answers.includes(wrongAnswer) && wrongAnswer > 0) {
+                    answers.push(wrongAnswer);
+                }
+            }
+
+            answers.sort(() => Math.random() - 0.5);
+            answers.forEach(answer => {
+                const button = document.createElement('button');
+                button.textContent = answer;
+                button.addEventListener('click', () => {
+                    clearInterval(timer);
+                    checkAnswer(answer, correctAnswer, table, multiplier);
+                });
+                answersDiv.appendChild(button);
             });
-            answersDiv.appendChild(button);
-        });
+        } else if (mode === 'Open') {
+            const inputBox = document.createElement('input');
+            inputBox.type = 'number';
+            inputBox.id = 'manualAnswer';
+            inputBox.placeholder = 'Enter your answer';
+            inputBox.autofocus = true;
+            inputBox.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    const userAnswer = parseInt(inputBox.value);
+                    clearInterval(timer);
+                    checkAnswer(userAnswer, correctAnswer, table, multiplier);
+                }
+            });
+            answersDiv.appendChild(inputBox);
+            inputBox.focus();
+        }
 
         startTimer();
     }
@@ -238,6 +271,26 @@ document.addEventListener('DOMContentLoaded', () => {
         settingsSection.style.display = 'none';
         gameSection.style.display = 'block';
         stopButton.style.display = 'block';
+
+        // Check the current mode and initialize accordingly
+        if (mode === 'Open') {
+            answersDiv.innerHTML = '';
+            const inputBox = document.createElement('input');
+            inputBox.type = 'number';
+            inputBox.id = 'manualAnswer';
+            inputBox.placeholder = 'Enter your answer';
+            inputBox.autofocus = true;
+            inputBox.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    const userAnswer = parseInt(inputBox.value);
+                    clearInterval(timer);
+                    checkAnswer(userAnswer, correctAnswer, table, multiplier);
+                }
+            });
+            answersDiv.appendChild(inputBox);
+            inputBox.focus();
+        }
+
         generateQuestion();
     });
 
