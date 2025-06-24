@@ -256,7 +256,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 generateQuestion();
             }
-        }, 100);
+        }, 300);
     }
 
     function updateScore(table, isCorrect) {
