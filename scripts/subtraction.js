@@ -75,6 +75,11 @@ class SubtractionGame {
     }
 
     updateTimer() {
+        // Clear any existing timer
+        if (this.timer) {
+            clearInterval(this.timer);
+        }
+
         this.timeLeft--;
         const progress = (this.timeLeft / 10) * 100;
         this.progressBar.style.width = `${progress}%`;
@@ -186,4 +191,4 @@ class SubtractionGame {
 // Initialize the game when the page loads
 document.addEventListener('DOMContentLoaded', () => {
     new SubtractionGame();
-}); 
+});

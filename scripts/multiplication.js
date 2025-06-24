@@ -84,6 +84,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function startTimer() {
+        // Clear any existing timer
+        if (timer) {
+            clearInterval(timer);
+        }
+
         let width = 100;
         progressDiv.style.width = width + '%';
         timer = setInterval(() => {
