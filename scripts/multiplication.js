@@ -16,6 +16,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let timer;
     const scores = {};
     const questionStats = {}; // To track stats for each question
+    const unansweredQuestions = {}; // To track unanswered questions for each table
+    const recentlyAsked = []; // To track recently asked questions
+    const MAX_RECENTLY_ASKED = 5; // Limit for recently asked questions
 
     function getRandomInt(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -31,9 +34,64 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const table = selectedTables[getRandomInt(0, selectedTables.length - 1)];
-        const multiplier = getRandomInt(1, 10);
+        // Initialize unanswered questions for selected tables
+        selectedTables.forEach(table => {
+            if (!unansweredQuestions[table]) {
+                unansweredQuestions[table] = [];
+                for (let multiplier = 1; multiplier <= 10; multiplier++) {
+                    unansweredQuestions[table].push(multiplier);
+                }
+            }
+        });
+
+        let table, multiplier;
+
+        // Prefer unanswered questions
+        const tablesWithUnanswered = selectedTables.filter(table => unansweredQuestions[table].length > 0);
+        if (tablesWithUnanswered.length > 0) {
+            table = tablesWithUnanswered[getRandomInt(0, tablesWithUnanswered.length - 1)];
+            const multiplierIndex = getRandomInt(0, unansweredQuestions[table].length - 1);
+            multiplier = unansweredQuestions[table].splice(multiplierIndex, 1)[0];
+        } else {
+            // Create pools for incorrect and correct questions
+            const incorrectQuestions = [];
+            const correctQuestions = [];
+
+            selectedTables.forEach(table => {
+                for (let multiplier = 1; multiplier <= 10; multiplier++) {
+                    const key = `${table}x${multiplier}`;
+                    if (!recentlyAsked.includes(key)) {
+                        if (!questionStats[key] || questionStats[key].correct < questionStats[key].total) {
+                            incorrectQuestions.push({ table, multiplier });
+                        } else {
+                            correctQuestions.push({ table, multiplier });
+                        }
+                    }
+                }
+            });
+
+            if (incorrectQuestions.length > 0) {
+                const question = incorrectQuestions[getRandomInt(0, incorrectQuestions.length - 1)];
+                table = question.table;
+                multiplier = question.multiplier;
+            } else if (correctQuestions.length > 0) {
+                const question = correctQuestions[getRandomInt(0, correctQuestions.length - 1)];
+                table = question.table;
+                multiplier = question.multiplier;
+            } else {
+                table = selectedTables[getRandomInt(0, selectedTables.length - 1)];
+                multiplier = getRandomInt(1, 10);
+            }
+        }
+
         const correctAnswer = table * multiplier;
+
+        // Track recently asked questions
+        const questionKey = `${table}x${multiplier}`;
+        recentlyAsked.push(questionKey);
+        if (recentlyAsked.length > MAX_RECENTLY_ASKED) {
+            recentlyAsked.shift();
+        }
 
         questionDiv.textContent = `What is ${table} x ${multiplier}?`;
 
@@ -51,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const button = document.createElement('button');
             button.textContent = answer;
             button.addEventListener('click', () => {
-                clearInterval(timer); // Ensure timer is cleared when an answer is clicked
+                clearInterval(timer);
                 checkAnswer(answer, correctAnswer, table, multiplier);
             });
             answersDiv.appendChild(button);
