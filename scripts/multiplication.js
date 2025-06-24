@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const settingsSection = document.getElementById('settings');
     let timer;
     const scores = {};
+    const questionStats = {}; // To track stats for each question
 
     function getRandomInt(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -49,11 +50,54 @@ document.addEventListener('DOMContentLoaded', () => {
         answers.forEach(answer => {
             const button = document.createElement('button');
             button.textContent = answer;
-            button.addEventListener('click', () => checkAnswer(answer, correctAnswer, table, multiplier));
+            button.addEventListener('click', () => {
+                clearInterval(timer); // Ensure timer is cleared when an answer is clicked
+                checkAnswer(answer, correctAnswer, table, multiplier);
+            });
             answersDiv.appendChild(button);
         });
 
         startTimer();
+    }
+
+    function updateQuestionStats(table, multiplier, isCorrect) {
+        const key = `${table}x${multiplier}`;
+        if (!questionStats[key]) {
+            questionStats[key] = { correct: 0, total: 0 };
+        }
+        questionStats[key].total += 1;
+        if (isCorrect) {
+            questionStats[key].correct += 1;
+        }
+        renderScores();
+    }
+
+    function renderScores() {
+        scoreBoardDiv.innerHTML = '';
+        const sortedTables = Object.keys(scores).sort((a, b) => parseInt(a) - parseInt(b));
+        for (const table of sortedTables) {
+            const score = scores[table];
+            const scoreDiv = document.createElement('div');
+            scoreDiv.classList.add('score');
+            scoreDiv.innerHTML = `<strong>Table ${table}:</strong> Correct: ${score.correct}, Incorrect: ${score.incorrect}`;
+
+            const tableStats = Object.entries(questionStats)
+                .filter(([key]) => key.startsWith(`${table}x`))
+                .sort(([keyA], [keyB]) => {
+                    const multiplierA = parseInt(keyA.split('x')[1]);
+                    const multiplierB = parseInt(keyB.split('x')[1]);
+                    return multiplierA - multiplierB;
+                })
+                .map(([key, { correct, total }]) => `<div>${key}: ${correct}/${total}</div>`)
+                .join('');
+
+            const statsDiv = document.createElement('div');
+            statsDiv.classList.add('table-stats');
+            statsDiv.innerHTML = tableStats;
+
+            scoreDiv.appendChild(statsDiv);
+            scoreBoardDiv.appendChild(scoreDiv);
+        }
     }
 
     function checkAnswer(selected, correct, table, multiplier) {
@@ -71,10 +115,12 @@ document.addEventListener('DOMContentLoaded', () => {
             result.textContent = `${table} x ${multiplier} = ${selected}`;
             result.classList.add('correct');
             updateScore(table, true);
+            updateQuestionStats(table, multiplier, true);
         } else {
             result.innerHTML = `${table} x ${multiplier} = <span class="wrong-answer">${selected}</span> (${correct})`;
             result.classList.add('incorrect');
             updateScore(table, false);
+            updateQuestionStats(table, multiplier, false);
         }
         answerHistoryDiv.appendChild(result);
         if (answerHistoryDiv.children.length > 4) {
@@ -120,19 +166,8 @@ document.addEventListener('DOMContentLoaded', () => {
         renderScores();
     }
 
-    function renderScores() {
-        scoreBoardDiv.innerHTML = '';
-        for (const table in scores) {
-            const score = scores[table];
-            const scoreDiv = document.createElement('div');
-            scoreDiv.classList.add('score');
-            scoreDiv.textContent = `Table ${table}: Correct: ${score.correct}, Incorrect: ${score.incorrect}`;
-            scoreBoardDiv.appendChild(scoreDiv);
-        }
-    }
-
     function showFinalScore() {
-        clearInterval(timer);
+        clearInterval(timer); // Clear timer when the game ends
         gameSection.style.display = 'none';
         settingsSection.style.display = 'block';
         stopButton.style.display = 'none';
