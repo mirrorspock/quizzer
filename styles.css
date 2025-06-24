@@ -145,3 +145,35 @@ header h1 {
 .incorrect .wrong-answer {
     text-decoration: line-through;
 }
+
+#feedback {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2rem;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 5px;
+    z-index: 1000;
+    animation: fadeOut 1s ease-in-out;
+}
+
+.correct-feedback {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.incorrect-feedback {
+    background-color: #F44336;
+    color: white;
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}

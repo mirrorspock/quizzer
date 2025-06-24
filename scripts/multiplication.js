@@ -191,6 +191,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function showFeedback(isCorrect) {
+        const feedbackDiv = document.createElement('div');
+        feedbackDiv.id = 'feedback';
+        feedbackDiv.textContent = isCorrect ? 'Correct!' : 'Incorrect!';
+        feedbackDiv.classList.add(isCorrect ? 'correct-feedback' : 'incorrect-feedback');
+        document.body.appendChild(feedbackDiv);
+
+        setTimeout(() => {
+            feedbackDiv.remove();
+        }, 1000); // Feedback disappears after 1 second
+    }
+
     function checkAnswer(selected, correct, table, multiplier) {
         clearInterval(timer);
         const result = document.createElement('div');
@@ -207,11 +219,13 @@ document.addEventListener('DOMContentLoaded', () => {
             result.classList.add('correct');
             updateScore(table, true);
             updateQuestionStats(table, multiplier, true);
+            showFeedback(true); // Show correct feedback
         } else {
             result.innerHTML = `${table} x ${multiplier} = <span class="wrong-answer">${selected}</span> (${correct})`;
             result.classList.add('incorrect');
             updateScore(table, false);
             updateQuestionStats(table, multiplier, false);
+            showFeedback(false); // Show incorrect feedback
         }
         answerHistoryDiv.appendChild(result);
         if (answerHistoryDiv.children.length > 4) {
